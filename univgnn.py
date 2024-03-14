@@ -44,7 +44,7 @@ def generate_pattern(k):
                 A row [i_1, ..., i_k] contains integers where equality is denoted by i_p == i_q
     """
     sets = partition(list(range(k)))
-    patterns = np.zeros((len(sets), k), dtype=np.int)
+    patterns = np.zeros((len(sets), k), dtype=np.int64)
     for (p_ind,pattern) in enumerate(sets):
         for (i_ind,ind_set) in enumerate(pattern):
             for i in ind_set:
@@ -275,8 +275,9 @@ class ToyGraphs(Dataset):
                     A = nx.star_graph(n-1)
                 elif choice[i] == 4:
                     A = nx.wheel_graph(n)
-                self.Ws[i,:,:] = torch.tensor(nx.to_numpy_matrix(A)).float() * weight
-        
+                # self.Ws[i,:,:] = torch.tensor(nx.to_numpy_matrix(A)).float() * weight
+                self.Ws[i, :, :] = torch.tensor(nx.to_numpy_array(A)).float() * weight
+
         if mode == 'equivariant':
             self.label = torch.zeros(n_sample,n)
         else:
@@ -472,3 +473,6 @@ plt.xlabel('S')
 plt.ylabel('Loss')
 plt.title(mode)
 plt.legend(['k={}'.format(k)])
+
+# This line displays the plot
+plt.show()
